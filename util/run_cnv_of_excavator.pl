@@ -47,11 +47,9 @@ my %delivery_hash;
 delivery_split (\@list_sample_id, \%delivery_hash);
 
 my $log_path = "$project_path/result/sh_log_file/41_cna_call/";
-my $mkdir_log_path = "mkdir $log_path";
-system($mkdir_log_path);
+make_dir($log_path);
 
 for (my $i=0; $i<@list_pair_id; $i++){
-    
     my $sh_dir = "$log_path/$list_pair_id[$i]";
     make_dir ($sh_dir);
     
@@ -66,7 +64,6 @@ for (my $i=0; $i<@list_pair_id; $i++){
     my $case_bam = "$bam_path/$case/$case.printrecal.bam";
     print $fh_input "$bed_name $hg_version $control_bam $delivery_case"."_control C$j \n";
     print $fh_input "$bed_name $hg_version $case_bam $delivery_case T$j \n";
-
     close $read_input_txt;
 }
 
