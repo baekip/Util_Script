@@ -1,0 +1,10 @@
+#!/bin/sh
+
+bash qualimap.sample.sh  TN1609D0161 &
+bash qualimap.sample.sh  TN1609D0162 &
+bash qualimap.sample.sh  TN1609D0163 &
+bash qualimap.sample.sh  TN1609D0165 &
+bash qualimap.sample.sh  TN1609D0166 &
+bash qualimap.sample.sh  TN1609D0167 &
+bash qualimap.sample.sh  TN1609D0169 &
+bash qualimap.sample.sh  TN1609D0171 &
