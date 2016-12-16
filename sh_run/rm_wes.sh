@@ -1,8 +1,6 @@
 #!/bin/bash
 
 rm -rf 02-1_cutadapt_filt
-rm -rf 02-2_sickle_filt
-rm -rf 03_fastqc_filt
 rm -rf 04_bwasamtools_mem
 rm -rf 06-1_picard_merge
 rm -rf 07-1_picard_dedup

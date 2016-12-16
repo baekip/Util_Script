@@ -1,5 +1,0 @@
-#!/bin/sh
-bash bedtools.depth_coverage.sample.sh TN1609D0160 & 
-bash bedtools.depth_coverage.sample.sh TN1609D0164 & 
-bash bedtools.depth_coverage.sample.sh TN1609D0168 & 
-bash bedtools.depth_coverage.sample.sh TN1609D0170 & 

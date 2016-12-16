@@ -1,5 +1,5 @@
 #!/bin/bash
-project_path=/BiO/BioProjects/Genohub-Human-WES-2016-10-TBO160290-2/
+project_path=/BiO/BioProjects/Axil-Human-WGS-2016-11-TBO160322-1/
 sample_id=$1
 date
 /BiO/BioTools/bedtools/bedtools-2.17.0/bin/bedtools coverage \
