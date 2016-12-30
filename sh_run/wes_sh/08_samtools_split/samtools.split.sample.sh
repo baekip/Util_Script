@@ -1,0 +1,9 @@
+#!/bin/bash
+project_path=/BiO/BioProjects/Genohub-Human-WES-2016-10-TBO160290-1/
+sample_id=$1
+date
+ln -s $project_path/result//07-1_picard_dedup/$sample_id/$sample_id.dedup.bam \
+    $project_path/result//08_samtools_split/$sample_id/$sample_id.bam/
+ln -s $project_path/result//07-1_picard_dedup/$sample_id/$sample_id.dedup.bai \
+    $project_path/result//08_samtools_split/$sample_id/$sample_id.bai
+date

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+bash samtools.sample.sh TN1609D0160 & 
+bash samtools.sample.sh TN1609D0164 & 
+bash samtools.sample.sh TN1609D0168 & 
+bash samtools.sample.sh TN1609D0170 & 
