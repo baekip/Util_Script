@@ -30,17 +30,20 @@ read_general_config ($in_config, \%info);
 
 my $project_path=$info{project_path};
 my $project_id=$info{project_id};
-
+my $telomeric_path="$project_path/result/00_telo-seq";
 my $sample_id=$info{sample_id};
 my @sample_list=split /\,/, $sample_id;
 
 #############################################################
-#1.make directories
+#1.make report description
 #############################################################
-my $report_path="$project_path/00_CNV_run/report/";
+my $report_path="$project_path/result/00_CNV_run/report/";
 make_dir($report_path);
 my $report_result="$report_path/report.result";
 open my $report_fh, '>', $report_result or die;
+
+##Introduction
+
 
 foreach my $id (@sample_list) {
     print $report_fh "##$id\n
@@ -90,7 +93,40 @@ If log2 value is up to       Copy number
        -0.4                        1
         0.3                        2
         0.7                        3
-        ...                       ...\n\n";
+        ...                       ...\n\n
+
+
+### Telomeric Summary Result\n\n
+Estimating telomere lengths with Next Generation Sequencing\n
+
+\`\`\`{r teloseq_$id, results=\'asis\',echo=FALSE}\n
+S_$id\_teloseq_table=read.table(file.path(project_path, \"\", \"result/$id/$id.telo-seq.result\"), header=T, sep= \"\t\", check.names = T)
+print(S_$id\_teloseq_table)
+\`\`\`\n
+
+\`\`\`{r telseq_$id, results=\'asis\',echo=FALSE}\n
+S_$id\_telseq_table=read.table(file.path(project_path, \"\", \"result/$id/$id.telo-seq.result\"), header=T, sep= \"\t\", check.names = T)
+datatable(S_$id\_telseq_table)
+\`\`\`\n
+
+Column                        Definitions
+-----------------------      -----------------------------------------------------
+ReadGroup                     read group, Defined by the RG tag in BAM header.
+Library                       sequencing library that the read group belongs to.
+Sample                        defined by the SM tag in BAM header.
+Total                         total number of reads in this read group.
+Mapped                        total number of mapped reads, SAM flag 0x4.
+Duplicates                    total number of duplicate reads, SAM flag 0x400.
+LENGH_ESTIMATE                estimated telomere length.
+TEL0                          read counts for reads containing no TTAGGG/CCCTAA repeats.
+TEL1                          read counts for reads containing only 1 TTAGGG/CCCTAA repeats.
+TELn                          read counts for reads containing only n TTAGGG/CCCTAA repeats.
+TEL16                         read counts for reads containing 16 TTAGGG/CCCTAA repeats.
+GC0                           read counts for reads with GC between 40%-42%.
+GC1                           read counts for reads with GC between 42%-44%.
+GCn                           read counts for reads with GC between (40\%\+n2%)-(42\%\+(n+1)2%).
+GC9                           read counts for reads with GC between 58%-60%.\n\n";
+
 }
 close($report_fh);
 
