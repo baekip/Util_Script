@@ -1,5 +1,0 @@
-#!/bin/sh
-
-bash samtools.uniqueread.sample.sh TN1609D0176 & 
-bash samtools.uniqueread.sample.sh TN1609D0181 & 
-bash samtools.uniqueread.sample.sh TN1609D0182 & 

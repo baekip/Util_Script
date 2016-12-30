@@ -1,8 +1,0 @@
-#!/bin/bash
-project_path=/BiO/BioProjects/Genohub-Human-WES-2016-10-TBO160290-1/
-sample_id=$1
-date
-/BiO/BioTools/samtools/samtools-1.2/samtools stats \
-    $project_path/result//07-1_picard_dedup/$sample_id/$sample_id.dedup.bam > \
-    $project_path/result//07-2_samtools_stats/$sample_id/$sample_id.dedup.stats
-date
