@@ -11,6 +11,9 @@ bam_path=$project_path/result/02_bam_file/
 normal_bam=$bam_path/$normal_id\.bam
 tumor_bam=$bam_path/$tumor_id\.bam
 target_bed=/BiO/BioPeople/brandon/H_sapiens_ENS_72.chr.coding.merged.bed
+log_file=$mutect_path/$paired_id\.mutect.log
+
+exec > $log_file 2>&1
 
 date
 /usr/bin/java -Xmx3g \
