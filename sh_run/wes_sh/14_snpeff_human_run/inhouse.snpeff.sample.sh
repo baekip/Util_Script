@@ -1,0 +1,113 @@
+#!/bin/bash
+project_path=/BiO/BioProjects/Axil-Human-WGS-2016-11-TBO160322-1
+sample_id=$1
+
+date
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$project_path/result//14_snpeff_human_run/$sample_id/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/snpEff.jar \
+	-geneId \
+	-c /BiO/BioTools/snpeff/snpEff_v4.2/snpEff.config \
+	-v hg19 \
+	-s $project_path/result//14_snpeff_human_run/$sample_id/$sample_id\.BOTH.snpeff.html \
+	-o vcf \
+	$project_path/result//13_gatk_unifiedgenotyper/$sample_id/$sample_id\.BOTH.vcf | \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$project_path//result//14_snpeff_human_run/$sample_id/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	gwasCat -v - | \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$project_path/result//14_snpeff_human_run/$sample_id/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	varType -v - | \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$project_path/result//14_snpeff_human_run/$sample_id/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	annotate -noID -info COSMID -v /BiO/BioResources/DBs/COSMICDB/v71/CosmicCodingMuts.anno.vcf.gz - | \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$project_path/result//14_snpeff_human_run/$sample_id/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	annotate -dbsnp -v - | \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$project_path/result//14_snpeff_human_run/$sample_id/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	annotate -clinvar -v - | \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=/BiO/BioProjects/Asan-Human-WES-2015-12-TBD150418-2/result/00_vcf_target_stat/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	annotate -v /BiO/BioResources/DBs/KNIH/KNIH.BOTH.sort.out.herder.vcf.gz | \
+        
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$output_prefix/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	annotate -v /BiO/kjh/BioResources/DBs/KPGP/KPGP.38.20140427.header.vcf.gzi \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$output_prefix/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	dbNSFP -v - | \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$project_path/result//14_snpeff_human_run/$sample_id/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	annotate -v /BiO/BioResources/DBs/EXAC/release0.3/ExAC.r0.3.sites.vep.header.vcf.gz | sed "s/dbNSFP_GERP++/dbNSFP_GERP/g"| grep -v "hg38_chr" > $project_path/result//14_snpeff_human_run/$sample_id/$sample_id\.BOTH.snpeff.vcf
+
+cat $project_path/result//14_snpeff_human_run/$sample_id/$sample_id\.BOTH.snpeff.vcf | /BiO/BioTools/snpeff/snpEff_v4.2/scripts/vcfEffOnePerLine.pl | /BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$project_path/result//14_snpeff_human_run/$sample_id/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	extractFields -e "." - CHROM POS ID REF ALT FILTER VARTYPE \
+	"GEN['$sample_id'].GT" "GEN['$sample_id'].AD" "GEN['$sample_id'].DP" \
+	"ANN[*].EFFECT" \
+	"ANN[*].IMPACT" \
+	"ANN[*].GENE" \
+	"ANN[*].FEATURE" \
+	"ANN[*].FEATUREID" \
+	"ANN[*].BIOTYPE" \
+	"ANN[*].RANK" \
+	"ANN[*].HGVS_C" \
+	"ANN[*].HGVS_P" \
+	"ANN[*].CDNA_POS" \
+	"ANN[*].CDNA_LEN" \
+	"ANN[*].CDS_POS" \
+	"ANN[*].CDS_LEN" \
+	"ANN[*].AA_POS" \
+	"ANN[*].AA_LEN" \
+	"ANN[*].DISTANCE" \
+	GWASCAT_TRAIT \
+	COSMID \
+	"CLNDSDBID" \
+	"CLNORIGIN" \
+	"CLNSIG" \
+	"CLNDBN" \
+	"dbNSFP_Uniprot_acc" \
+	"dbNSFP_Interpro_domain" \
+	"dbNSFP_SIFT_pred" \
+	"dbNSFP_Polyphen2_HDIV_pred" \
+	"dbNSFP_Polyphen2_HVAR_pred" \
+	"dbNSFP_LRT_pred" \
+	"dbNSFP_MutationTaster_pred" \
+	"dbNSFP_GERP___NR" \
+	"dbNSFP_GERP___RS" \
+	"dbNSFP_phastCons100way_vertebrate" \
+	"dbNSFP_1000Gp1_AF" \
+	"dbNSFP_1000Gp1_AFR_AF" \
+	"dbNSFP_1000Gp1_EUR_AF" \
+	"dbNSFP_1000Gp1_AMR_AF" \
+	"dbNSFP_1000Gp1_ASN_AF" \
+	"dbNSFP_ESP6500_AA_AF" \
+	"dbNSFP_ESP6500_EA_AF" \
+	"EXAC_AC" \
+	"EXAC_AN" \
+        "INHOUSE_AN" \
+        "INHOUSE_AF" \
+	> $project_path/result//14_snpeff_human_run/$sample_id/$sample_id\.BOTH.snpeff.tsv.tmp
+python /home/shsong/work/Pipeline/dnaseq/script//../util//merge_isofrom_snv.py -i $project_path/result//14_snpeff_human_run/$sample_id/$sample_id\.BOTH.snpeff.tsv.tmp -o $project_path/result//14_snpeff_human_run/$sample_id/$sample_id.BOTH.snpeff.isoform.tsv
+python /home/shsong/work/Pipeline/dnaseq/script//../util//write_xlsx_from_tsv.py -i $project_path/result//14_snpeff_human_run/$sample_id/$sample_id\.BOTH.snpeff.isoform.tsv -o $project_path/result//14_snpeff_human_run/$sample_id/$sample_id\.BOTH.snpeff.isoform.xlsx
+python /home/shsong/work/Pipeline/dnaseq/script//../util//write_xlsx_from_tsv.py -i $project_path/result//14_snpeff_human_run/$sample_id/$sample_id\.BOTH.snpeff.tsv.tmp -o $project_path/result//14_snpeff_human_run/$sample_id/$sample_id\.BOTH.snpeff.xlsx
+date
