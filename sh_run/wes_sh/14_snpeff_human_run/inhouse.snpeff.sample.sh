@@ -43,10 +43,10 @@ date
 	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
 	annotate -v /BiO/BioResources/DBs/KNIH/KNIH.BOTH.sort.out.herder.vcf.gz | \
         
-#/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
-#	-Djava.io.tmpdir=$output_prefix/tmp/ \
-#	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
-#	annotate -v /BiO/kjh/BioResources/DBs/KPGP/KPGP.38.20140427.header.vcf.gzi \
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$output_prefix/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	annotate -v /BiO/BioPeople/baekip/BioResources/DBs/KPGP/KPGP.38.20140427.header.vcf.gz | \
 
 /BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
 	-Djava.io.tmpdir=$project_path/result/14_snpeff_human_run/$sample_id/tmp \
@@ -106,6 +106,7 @@ cat $project_path/result//14_snpeff_human_run/$sample_id/$sample_id\.BOTH.snpeff
 	"EXAC_AN" \
         "INHOUSE_AN" \
         "INHOUSE_AF" \
+        "KPGP_Alt_allele_frq" \
 	> $project_path/result//14_snpeff_human_run/$sample_id/$sample_id\.BOTH.snpeff.tsv.tmp
 python /home/shsong/work/Pipeline/dnaseq/script//../util//merge_isofrom_snv.py -i $project_path/result//14_snpeff_human_run/$sample_id/$sample_id\.BOTH.snpeff.tsv.tmp -o $project_path/result//14_snpeff_human_run/$sample_id/$sample_id.BOTH.snpeff.isoform.tsv
 python /home/shsong/work/Pipeline/dnaseq/script//../util//write_xlsx_from_tsv.py -i $project_path/result//14_snpeff_human_run/$sample_id/$sample_id\.BOTH.snpeff.isoform.tsv -o $project_path/result//14_snpeff_human_run/$sample_id/$sample_id\.BOTH.snpeff.isoform.xlsx

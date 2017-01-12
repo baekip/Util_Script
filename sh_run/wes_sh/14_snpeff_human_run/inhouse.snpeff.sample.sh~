@@ -39,17 +39,17 @@ date
 	annotate -clinvar -v - | \
 
 /BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
-	-Djava.io.tmpdir=/BiO/BioProjects/Asan-Human-WES-2015-12-TBD150418-2/result/00_vcf_target_stat/tmp/ \
+	-Djava.io.tmpdir=$project_path/result/14_snpeff_human_run/$sample_id/tmp/ \
 	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
 	annotate -v /BiO/BioResources/DBs/KNIH/KNIH.BOTH.sort.out.herder.vcf.gz | \
         
-/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
-	-Djava.io.tmpdir=$output_prefix/tmp/ \
-	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
-	annotate -v /BiO/kjh/BioResources/DBs/KPGP/KPGP.38.20140427.header.vcf.gzi \
+#/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+#	-Djava.io.tmpdir=$output_prefix/tmp/ \
+#	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+#	annotate -v /BiO/kjh/BioResources/DBs/KPGP/KPGP.38.20140427.header.vcf.gzi \
 
 /BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
-	-Djava.io.tmpdir=$output_prefix/tmp/ \
+	-Djava.io.tmpdir=$project_path/result/14_snpeff_human_run/$sample_id/tmp \
 	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
 	dbNSFP -v - | \
 
