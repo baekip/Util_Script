@@ -146,16 +146,16 @@ close($report_fh);
 #############################################################
 #sub
 #############################################################
-sub checkFile{
+sub checkfile{
 	my $file = shift;
 	if (!-f $file){
-		die "ERROR ! not found <$file>\n";
+		die "error ! not found <$file>\n";
 	}
 }
 
 sub read_general_config{
 	my ($file, $hash_ref) = @_;
-	open my $fh, '<:encoding(UTF-8)', $file or die;
+	open my $fh, '<:encoding(utf-8)', $file or die;
 	while (my $row = <$fh>) {
 		chomp $row;
 		if ($row =~ /^#/){ next; } # pass header line
