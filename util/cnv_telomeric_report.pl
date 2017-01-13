@@ -112,11 +112,6 @@ datatable(S_$id\_inv_table)
 ### Telomeric Summary Result\n\n
 Estimating telomere lengths with Next Generation Sequencing\n
 
-\`\`\`{r teloseq_$id, results=\'asis\',echo=FALSE}\n
-S_$id\_teloseq_table=read.table(file.path(project_path, \"\", \"result/$id/$id.telo-seq.result\"), header=T, sep= \"\t\", check.names = T)
-datatable(S_$id\_teloseq_table)
-\`\`\`\n
-
 \`\`\`{r telseq_$id, results=\'asis\',echo=FALSE}\n
 S_$id\_telseq_table=read.table(file.path(project_path, \"\", \"result/$id/$id.telseq.result\"), header=T, sep= \"\t\", check.names = T)
 datatable(S_$id\_telseq_table)
@@ -146,16 +141,16 @@ close($report_fh);
 #############################################################
 #sub
 #############################################################
-sub checkfile{
+sub checkFile{
 	my $file = shift;
 	if (!-f $file){
-		die "error ! not found <$file>\n";
+		die "ERROR ! not found <$file>\n";
 	}
 }
 
 sub read_general_config{
 	my ($file, $hash_ref) = @_;
-	open my $fh, '<:encoding(utf-8)', $file or die;
+	open my $fh, '<:encoding(UTF-8)', $file or die;
 	while (my $row = <$fh>) {
 		chomp $row;
 		if ($row =~ /^#/){ next; } # pass header line
