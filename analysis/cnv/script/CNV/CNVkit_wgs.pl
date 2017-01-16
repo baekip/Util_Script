@@ -13,8 +13,18 @@ use Cwd qw(abs_path);
 
 my $in_config;
 GetOptions(
-    'config=s' => $in_config,
+    'config=s' => \$in_config,
 );
+
+if (!defined $in_config or !-f $in_config){
+    die "ERROR! check your config file with -c option \n";
+}
+
+print $in_config."\n";
+
+my $config_path = dirname (abs_path $in_config);
+$in_config =  "$config_path/$in_config";
+print $in_config."\n";
 
 my %info;
 read_general_config($in_config, \%info);
@@ -47,9 +57,9 @@ foreach my $sample_id (@delivery_tbi_list){
     my $cnv_sh = "$cnv_sh_path/$delivery_id\.cnvkit.wgs.sh";
     open my $sh_fh, '>', $cnv_sh or die;
    
-    print $sh_sh "#!/bin/sh
+    print $sh_fh "#!/bin/sh
     date\n\n";
-    print $sh_sh "$cnvkit batch \
+    print $sh_fh "$cnvkit batch \
     -m wgs \
     $bam_file \
     -n \
