@@ -1,0 +1,117 @@
+#!/bin/bash
+normal_id=$1
+tumor_id=$2
+paired_id=$1\_$2
+project_path=/BiO/BioProjects/Axil-Human-WGS-2016-11-TBO160322-1
+work_path=$project_path/result/30-1_mutect_run/$paired_id/
+snpeff_path=$project_path/result/30-2_snpeff_cancer_run/$paired_id/
+#work_path=$project_path/result/32-1_indeldetector_run/$paired_id/
+#snpeff_path=$project_path/result/32-2_snpeff_cancer_run/$paired_id/
+mkdir -p $work_path
+mkdir -p $snpeff_path
+
+vcf__pattern=$work_path/$paired_id\.SNP
+snpeff_pattern=$snpeff_path/$paired_id\.SNP
+#vcf_file=$work_path/$paired_id\.INDEL
+log_file=$work_path/$paired_id\.snpeff.log
+
+exec > $log_file 2>&1
+##################################################################################
+
+date
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$snpeff_path/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/snpEff.jar \
+	-geneId \
+	-c /BiO/BioTools/snpeff/snpEff_v4.2/snpEff.config \
+	-v hg19 \
+	-s $snpeff_pattern\.snpeff.html \
+	-o vcf \
+	$vcf_file_pattern\.vcf | \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$snpeff_path/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	gwasCat -v - | \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$snpeff_path/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	varType -v - | \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$snpeff_path/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	annotate -noID -info COSMID -v /BiO/BioResources/DBs/COSMICDB/v71/CosmicCodingMuts.anno.vcf.gz - | \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$snpeff_path/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	annotate -dbsnp -v - | \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$snpeff_path/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	annotate -clinvar -v - | \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$snpeff_path/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	dbNSFP -v - | \
+
+/BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$snpeff_path/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	annotate -v /BiO/BioResources/DBs/EXAC/release0.3/ExAC.r0.3.sites.vep.header.vcf.gz | sed "s/dbNSFP_GERP++/dbNSFP_GERP/g"| grep -v "hg38_chr" > $snpeff_pattern\.snpeff.vcf
+
+cat $snpeff_pattern\.snpeff.vcf | /BiO/BioTools/snpeff/snpEff_v4.2/scripts/vcfEffOnePerLine.pl | /BiO/BioTools/java/jre1.7.0_51/bin/java -Xmx3g \
+	-Djava.io.tmpdir=$snpeff_path/tmp/ \
+	-jar /BiO/BioTools/snpeff/snpEff_v4.2/SnpSift.jar \
+	extractFields -e "." - CHROM POS ID REF ALT FILTER VARTYPE \
+	"GEN['$paired_id'].GT" "GEN['$paired_id'].AD" "GEN['$paired_id'].DP" \
+	"ANN[*].EFFECT" \
+	"ANN[*].IMPACT" \
+	"ANN[*].GENE" \
+	"ANN[*].FEATURE" \
+	"ANN[*].FEATUREID" \
+	"ANN[*].BIOTYPE" \
+	"ANN[*].RANK" \
+	"ANN[*].HGVS_C" \
+	"ANN[*].HGVS_P" \
+	"ANN[*].CDNA_POS" \
+	"ANN[*].CDNA_LEN" \
+	"ANN[*].CDS_POS" \
+	"ANN[*].CDS_LEN" \
+	"ANN[*].AA_POS" \
+	"ANN[*].AA_LEN" \
+	"ANN[*].DISTANCE" \
+	GWASCAT_TRAIT \
+	COSMID \
+	"CLNDSDBID" \
+	"CLNORIGIN" \
+	"CLNSIG" \
+	"CLNDBN" \
+	"dbNSFP_Uniprot_acc" \
+	"dbNSFP_Interpro_domain" \
+	"dbNSFP_SIFT_pred" \
+	"dbNSFP_Polyphen2_HDIV_pred" \
+	"dbNSFP_Polyphen2_HVAR_pred" \
+	"dbNSFP_LRT_pred" \
+	"dbNSFP_MutationTaster_pred" \
+	"dbNSFP_GERP___NR" \
+	"dbNSFP_GERP___RS" \
+	"dbNSFP_phastCons100way_vertebrate" \
+	"dbNSFP_1000Gp1_AF" \
+	"dbNSFP_1000Gp1_AFR_AF" \
+	"dbNSFP_1000Gp1_EUR_AF" \
+	"dbNSFP_1000Gp1_AMR_AF" \
+	"dbNSFP_1000Gp1_ASN_AF" \
+	"dbNSFP_ESP6500_AA_AF" \
+	"dbNSFP_ESP6500_EA_AF" \
+	"EXAC_AC" \
+	"EXAC_AN" \
+	> $snpeff_pattern\.snpeff.tsv.tmp
+python /home/shsong/work/Pipeline/dnaseq/script//../util//merge_isofrom_snv.py -i $snpeff_pattern\.snpeff.tsv.tmp -o $snpeff_pattern\.snpeff.isoform.tsv
+python /home/shsong/work/Pipeline/dnaseq/script//../util//write_xlsx_from_tsv.py -i $snpeff_pattern\.snpeff.isoform.tsv -o $snpeff_pattern\.snpeff.isoform.xlsx
+python /home/shsong/work/Pipeline/dnaseq/script//../util//write_xlsx_from_tsv.py -i $snpeff_pattern\.snpeff.tsv.tmp -o $snpeff_pattern\.snpeff.xlsx
+date

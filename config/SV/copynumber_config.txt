@@ -1,18 +1,20 @@
 ###################################################################################################
 #SV Config
 ###################################################################################################
-project_path=/BiO/BioProjects/Spain-Human-WES-2017-01-TBO160484/
-bam_path=/BiO/BioProjects/Spain-Human-WES-2017-01-TBO160484/result/12_gatk_printrecal/
+project_path=/bio/BioProjects/YSU-Human-WGS-2016-12-TBD160883/
+bam_path=/bio/BioProjects/YSU-Human-WGS-2016-12-TBD160883/result//13_sentieon_hg/
+bam_pattern=recal.bam
 project_id=TBO160484
 platform=wgs
-access_bed=
-refFlat_txt=
+access_bed=/bio/BioTools/cnvkit/cnvkit-0.8.1/data/access-5k-mappable.hg19.bed
+refFlat_txt=/bio/BioProjects/YSU-Human-WGS-2016-12-TBD160883/result/00_CNV_run/refFlat.txt
+reference=/bio/BioResources/References/Human/hg19/hg19.fa
+delivery_tbi_id=Blood:TN1611D1098:.,Benign:TN1611D1099:.,Malignancy:TN1611D1100:.
 
 ###################################################################################################
 #CNVkit Requirement
 ###################################################################################################
-cnvkit=
-
+cnvkit=/bio/BioPeople/baekip/BioTools/miniconda2/bin/cnvkit.py
 
 ###################################################################################################
 #SR Requirement
