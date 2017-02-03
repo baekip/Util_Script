@@ -3,6 +3,8 @@
 #Date: 2017.2.2
 #############################################################
 package Result;
+use Exporter qw(import);
+our @EXPORT_OK = qw (result_scatter_plot result_diagram_plot result_table);
 #############################################################
 ##sub
 ##############################################################
@@ -38,7 +40,7 @@ include_graphics($sample_id\_diagram_plot)
 }
 
 sub result_table {
-    my ($fh, $sample_id) = @_;
+    my ($fh, $gainloss, $sample_id) = @_;
     print $fh "### Total Result Table
 
  The log2 ratio value reported for each gene will be the value of the segment covering the gene. Where more than one segment overlaps the gene, i.e. if the gene contains a breakpoint, each segment's value will be reported as a separate row for the same gene.
@@ -46,7 +48,7 @@ sub result_table {
 [Download Result File](result/MC011-01_L/MC011-01_L.gene.gainloss)
 
 \`\`\`{r table_$sample_id, results=\'asis\',echo=FALSE}
-$sample_id\_cnv_result=read.table(file.path(project_path, \"\", \"result/MC011-01_L/MC011-01_L.gene.gainloss\"), header=T, sep=\"\", check.names = T)
+$sample_id\_cnv_result=read.table(file.path(project_path, \"\", \"$gainloss\"), header=T, sep=\"\", check.names = T)
 datatable($sample_id\_cnv_result)
 \`\`\`
 

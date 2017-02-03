@@ -1,15 +1,17 @@
-package Report;
 #############################################################
 #Author: baekip
 #Date: 2017.2.2
 #############################################################
+package Report;
+use Exporter qw(import);
+our @EXPORT_OK = qw(report_header report_opt report_int report_info report_workflow);
 #############################################################
 ##sub
 ##############################################################
 sub report_header {
     my ($fh, $ver, $project_id) = @_;
     
-    my $command = "---";
+    print $fh "---
 title: \"$project_id - SV Analysis Report $ver\"
 author: \"TheragenEtex Bio Institute\"
 date: \"\`r Sys.Date\(\)\`\"
@@ -28,66 +30,61 @@ date: \"\`r Sys.Date\(\)\`\"
 
  Internationally, the first step has been started in the overseas markets with personal genome analysis service contract with UNIMEX, Philippines in 2011. And a joint venture for entry to the personal genome analysis service in Beijing, China named \'Beijing Theragen Etex & Deyi Tech Co.,Ltd.\'\' has been established . Based on it, Asian genetic information and network have been organizing and gaining a foothold to move forward to global markets.
  Based on these technologies and experiences, we are putting endless efforts to revolutionize personalized medicine and to become a global leader in human welfare and healthcare.\n";
- my $CMD = "print $fh $command";
-return $CMD;
 }
- #
-#sub report_opt {
-#    my ($fh, $work_path) = @_;
-#    print $fh "\`\`\`\{r opt,cache=FALSE,echo=FALSE,warning=FALSE, message=FALSE\}
-#library(knitr)
-#library(rmarkdown)
-#library(DT)
-#library(ggplot2)
-#library(htmltools)
-#knitr::opts_chunk\$set(tidy=TRUE, highlight=TRUE, dev=\"png\",
-#    cache=FALSE, highlight=TRUE, autodep=TRUE, 
-#    warning=FALSE, error=FALSE,
-#    eval=TRUE, fig.width= 9, echo=FALSE,
-#    verbose=FALSE,
-#    message=FALSE, prompt=TRUE, comment=\'\', fig.cap=\'\',
-#    bootstrap.show.code=FALSE)
-#\`\`\`\n";
-#
-#    print $fh "\`\`\`\{r setup, include=FALSE\}
-#project_path=\"$work_path\"
-#setwd(project_path)
-#\`\`\`\n";
-#    close $fh;
-#}
-#
-#sub report_int {
-#    my $fh = shift;
-#    print $fh "# Introuduction
-#
-# Copy number changes are a useful diagnostic indicator for many diseases, including cancer. The gold standard for genome-wide copy number is array comparative genomic hybridization (array CGH). More recently, methods have been developed to obtain copy number information from whole-genome sequencing data. For clinical use, sequencing of genome partitions, such as the exome or a set of disease-relevant genes, is often preferred to enrich for regions of interest and sequence them at higher coverage to increase the sensitivity for calling variants. \n";
-#    close $fh;
-#}
-#
-#sub report_info {
-#    my ($fh, $ref) = @_;
-#    print $fh "## Reference Infromation
-#
-#Feature                                      Specification
-#---------------------------------------    ------------------------------------------------------------------------------------
-#genome / exome source content                $ref
-#
-#";
-#close $fh;
-#}
-#
-#sub report_workflow {
-#    my ($fh, $workflow_png) = @_;
-#    print $fh "# Workflow
-#http://journals.plos.org/ploscompbiol/article?id=10.1371%2Fjournal.pcbi.1004873
-#
-# The input to the program is one or more DNA sequencing read alignments in BAM format and the capture bait locations or a pre-built \"reference\" file. All additional data files used in the workflow, such as GC content and the location of sequence repeats, can be extracted from user-supplied genome sequences in FASTA format using scripts included with the CNVkit distribution. The workflow is not restricted to the human genome, and can be run equally well on other genomes.
-#
-#\`\`\`{r workflow_png, out.width = \"1200px\",out.heigh=\"1000px\"}
-#workflow_png = paste(project_path,\"$workflow_png\",sep=\"\")
-#knitr::include_graphics(workflow_png)
-#\`\`\`
-#The target and off-target bin BED files and reference file are constructed once for a given platform and can be used to process many samples sequenced on the same platform, as shown in the workflow on the left. Steps to construct the off-target bins are shown at the top-right, and construction of the reference is shown at the lower-right. 
-#http://dx.doi.org/10.1371/journal.pcbi.1004873.g001 \n";
-#}
+
+sub report_opt {
+    my ($fh, $work_path) = @_;
+    print $fh "\`\`\`\{r opt,cache=FALSE,echo=FALSE,warning=FALSE, message=FALSE\}
+library(knitr)
+library(rmarkdown)
+library(DT)
+library(ggplot2)
+library(htmltools)
+knitr::opts_chunk\$set(tidy=TRUE, highlight=TRUE, dev=\"png\",
+    cache=FALSE, highlight=TRUE, autodep=TRUE, 
+    warning=FALSE, error=FALSE,
+    eval=TRUE, fig.width= 9, echo=FALSE,
+    verbose=FALSE,
+    message=FALSE, prompt=TRUE, comment=\'\', fig.cap=\'\',
+    bootstrap.show.code=FALSE)
+\`\`\`\n";
+
+    print $fh "\`\`\`\{r setup, include=FALSE\}
+project_path=\"$work_path\"
+setwd($work_path)
+\`\`\`\n";
+}
+
+sub report_int {
+    my $fh = shift;
+    print $fh "# Introuduction
+
+ Copy number changes are a useful diagnostic indicator for many diseases, including cancer. The gold standard for genome-wide copy number is array comparative genomic hybridization (array CGH). More recently, methods have been developed to obtain copy number information from whole-genome sequencing data. For clinical use, sequencing of genome partitions, such as the exome or a set of disease-relevant genes, is often preferred to enrich for regions of interest and sequence them at higher coverage to increase the sensitivity for calling variants. \n";
+}
+
+sub report_info {
+    my ($fh, $ref) = @_;
+    print $fh "## Reference Infromation
+
+Feature                                      Specification
+---------------------------------------    ------------------------------------------------------------------------------------
+genome / exome source content                $ref
+
+";
+}
+
+sub report_workflow {
+    my ($fh, $workflow_png) = @_;
+    print $fh "# Workflow
+http://journals.plos.org/ploscompbiol/article?id=10.1371%2Fjournal.pcbi.1004873
+
+ The input to the program is one or more DNA sequencing read alignments in BAM format and the capture bait locations or a pre-built \"reference\" file. All additional data files used in the workflow, such as GC content and the location of sequence repeats, can be extracted from user-supplied genome sequences in FASTA format using scripts included with the CNVkit distribution. The workflow is not restricted to the human genome, and can be run equally well on other genomes.
+
+\`\`\`{r workflow_png, out.width = \"1200px\",out.heigh=\"1000px\"}
+workflow_png = paste(project_path,\"$workflow_png\",sep=\"\")
+knitr::include_graphics(workflow_png)
+\`\`\`
+The target and off-target bin BED files and reference file are constructed once for a given platform and can be used to process many samples sequenced on the same platform, as shown in the workflow on the left. Steps to construct the off-target bins are shown at the top-right, and construction of the reference is shown at the lower-right. 
+http://dx.doi.org/10.1371/journal.pcbi.1004873.g001 \n";
+}
 1;

@@ -4,7 +4,7 @@
 #############################################################
 package Utils;
 use Exporter qw(import);
-our @EXPORT_LIST = qw(read_config trim checkFile make_dir);
+our @EXPORT_OK = qw(read_config trim checkFile make_dir);
 #############################################################
 ##sub
 ##############################################################
@@ -15,7 +15,7 @@ sub read_config{
         chomp $row;
         if ($row =~ /^#/) {next;}
         if (length($row) == 0) {next;}
-        my ($key, $value) = split /\t/, $row;
+        my ($key, $value) = split /\=/, $row;
         $key = trim($key);
         $value = trim($value);
         $hash_ref->{$key}=$value;
