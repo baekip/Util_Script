@@ -4,7 +4,7 @@
 #############################################################
 package Utils;
 use Exporter qw(import);
-our @EXPORT_OK = qw(read_config trim checkFile make_dir);
+our @EXPORT_OK = qw(read_config trim checkFile make_dir cp_file);
 #############################################################
 ##sub
 ##############################################################
@@ -26,7 +26,7 @@ sub read_config{
 sub trim {
     my @result = @_;
     foreach (@result) {
-        s/^\s//;
+        s/^\s+//;
         s/\s+$//;
     }
     return wantarray ? @result : $result[0];
@@ -45,5 +45,12 @@ sub make_dir {
         my $cmd = "mkdir -p $dir";
         system($cmd);
     }
+}
+
+sub cp_file {
+    my ($orig, $target) = @_;
+    checkFile($orig);
+    my $cp_cmd = "cp $orig $target";
+    system($cp_cmd);
 }
 1;

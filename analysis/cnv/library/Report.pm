@@ -15,8 +15,8 @@ sub report_header {
 title: \"$project_id - SV Analysis Report $ver\"
 author: \"TheragenEtex Bio Institute\"
 date: \"\`r Sys.Date\(\)\`\"
-    output:
-    rmdformats::readthedown:
+output:
+  rmdformats::readthedown:
     self_contained: no
     thumbnails: true
     lightbox: true
@@ -40,19 +40,15 @@ library(rmarkdown)
 library(DT)
 library(ggplot2)
 library(htmltools)
-knitr::opts_chunk\$set(tidy=TRUE, highlight=TRUE, dev=\"png\",
-    cache=FALSE, highlight=TRUE, autodep=TRUE, 
-    warning=FALSE, error=FALSE,
-    eval=TRUE, fig.width= 9, echo=FALSE,
-    verbose=FALSE,
-    message=FALSE, prompt=TRUE, comment=\'\', fig.cap=\'\',
-    bootstrap.show.code=FALSE)
-\`\`\`\n";
+knitr::opts_chunk\$set(tidy=TRUE, highlight=TRUE, dev=\"png\",cache=FALSE, highlight=TRUE, autodep=TRUE, warning=FALSE, error=FALSE,eval=TRUE, fig.width= 9, echo=FALSE, verbose=FALSE, message=FALSE, prompt=TRUE, comment=\'\', fig.cap=\'\',bootstrap.show.code=FALSE)
+\`\`\`
+\n\n";
 
     print $fh "\`\`\`\{r setup, include=FALSE\}
 project_path=\"$work_path\"
-setwd($work_path)
-\`\`\`\n";
+setwd(project_path)
+\`\`\`
+\n\n\n";
 }
 
 sub report_int {
@@ -81,10 +77,13 @@ http://journals.plos.org/ploscompbiol/article?id=10.1371%2Fjournal.pcbi.1004873
  The input to the program is one or more DNA sequencing read alignments in BAM format and the capture bait locations or a pre-built \"reference\" file. All additional data files used in the workflow, such as GC content and the location of sequence repeats, can be extracted from user-supplied genome sequences in FASTA format using scripts included with the CNVkit distribution. The workflow is not restricted to the human genome, and can be run equally well on other genomes.
 
 \`\`\`{r workflow_png, out.width = \"1200px\",out.heigh=\"1000px\"}
-workflow_png = paste(project_path,\"$workflow_png\",sep=\"\")
-knitr::include_graphics(workflow_png)
+workflow_png = '$workflow_png'
+include_graphics(workflow_png)
 \`\`\`
-The target and off-target bin BED files and reference file are constructed once for a given platform and can be used to process many samples sequenced on the same platform, as shown in the workflow on the left. Steps to construct the off-target bins are shown at the top-right, and construction of the reference is shown at the lower-right. 
-http://dx.doi.org/10.1371/journal.pcbi.1004873.g001 \n";
+
+The target and off-target bin BED files and reference file are constructed once for a given platform and can be used to process many samples sequenced on the same platform, as shown in the workflow on the left. Steps to construct the off-target bins are shown at the top-right, and construction of the reference is shown at the lower-right. \n\n
+http://dx.doi.org/10.1371/journal.pcbi.1004873.g001 \n\n\n\n
+
+#Results\n\n";
 }
 1;
